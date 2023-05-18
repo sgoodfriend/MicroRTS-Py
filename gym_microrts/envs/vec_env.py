@@ -1,6 +1,5 @@
 import json
 import os
-import subprocess
 import sys
 import warnings
 import xml.etree.ElementTree as ET
@@ -16,9 +15,26 @@ from PIL import Image
 
 import gym_microrts
 
-MICRORTS_CLONE_MESSAGE = """
-WARNING: the repository does not include the microrts git submodule.
-Executing `git submodule update --init --recursive` to clone it now.
+MICRORTS_INSTALLTION_MESSAGE = """
+
+`microrts.jar` not found in `gym-microrts/microrts` folder. 
+Please make sure you have recursively cloned the microrts repository,
+and build the microrts.jar.
+
+If you already has cloned the gym-microrts repo, you can run the following command:
+
+$ git submodule update --init --recursive
+bash build.sh &> build.log
+python hello_world.py
+
+
+Otherwise feel free to start from scratch:
+
+$ git clone --recursive https://github.com/vwxyzjn/gym-microrts.git && \
+cd gym-microrts 
+poetry install
+bash build.sh &> build.log
+python hello_world.py
 """
 
 MICRORTS_MAC_OS_RENDER_MESSAGE = """
@@ -78,18 +94,10 @@ class MicroRTSGridModeVecEnv:
         self.cycle_maps = list(map(lambda i: os.path.join(self.microrts_path, i), cycle_maps))
         self.next_map = cycle(self.cycle_maps)
 
-        if not os.path.exists(f"{self.microrts_path}/README.md"):
-            print(MICRORTS_CLONE_MESSAGE)
-            os.system(f"git submodule update --init --recursive")
-        print(f"removing {self.microrts_path}/microrts.jar...")
-        if os.path.exists(f"{self.microrts_path}/microrts.jar"):
-            os.remove(f"{self.microrts_path}/microrts.jar")
-        print(f"building {self.microrts_path}/microrts.jar...")
-
-        # call the build script at the microrts folder
-        subprocess.run(["bash", "build.sh", "&>", "build.log"], cwd=f"{self.microrts_path}")
-
         # read map
+        if not os.path.exists(f"{self.microrts_path}/microrts.jar"):
+            raise Exception(MICRORTS_INSTALLTION_MESSAGE)
+
         root = ET.parse(os.path.join(self.microrts_path, self.map_paths[0])).getroot()
         self.height, self.width = int(root.get("height")), int(root.get("width"))
 
@@ -307,16 +315,8 @@ class MicroRTSBotVecEnv(MicroRTSGridModeVecEnv):
 
         # read map
         self.microrts_path = os.path.join(gym_microrts.__path__[0], "microrts")
-        if not os.path.exists(f"{self.microrts_path}/README.md"):
-            print(MICRORTS_CLONE_MESSAGE)
-            os.system(f"git submodule update --init --recursive")
-        print(f"removing {self.microrts_path}/microrts.jar...")
-        if os.path.exists(f"{self.microrts_path}/microrts.jar"):
-            os.remove(f"{self.microrts_path}/microrts.jar")
-        print(f"building {self.microrts_path}/microrts.jar...")
-
-        # call the build script at the microrts folder
-        subprocess.run(["bash", "build.sh", "&>", "build.log"], cwd=f"{self.microrts_path}")
+        if not os.path.exists(f"{self.microrts_path}/microrts.jar"):
+            raise Exception(MICRORTS_INSTALLTION_MESSAGE)
         root = ET.parse(os.path.join(self.microrts_path, self.map_paths[0])).getroot()
         self.height, self.width = int(root.get("height")), int(root.get("width"))
 

@@ -28,6 +28,8 @@ Prerequisites:
 $ git clone --recursive https://github.com/vwxyzjn/gym-microrts.git && \
 cd gym-microrts
 poetry install
+# build microrts
+bash build.sh &> build.log
 python hello_world.py
 ```
 
