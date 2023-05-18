@@ -151,7 +151,7 @@ class MicroRTSGridModeVecEnv:
         # [num_planes_hp(5), num_planes_resources(5), num_planes_player(5),
         # num_planes_unit_type(z), num_planes_unit_action(6)]
 
-        self.num_planes = [5, 5, 3, len(self.utt["unitTypes"]) + 1, 6]
+        self.num_planes = [5, 5, 3, len(self.utt["unitTypes"]) + 1, 6, 2]
         if partial_obs:
             self.num_planes = [5, 5, 3, len(self.utt["unitTypes"]) + 1, 6, 2]
         self.observation_space = gym.spaces.Box(
