@@ -1,6 +1,7 @@
 import json
 import os
 import sys
+from typing import TypeVar
 import warnings
 import xml.etree.ElementTree as ET
 from itertools import cycle
@@ -45,6 +46,7 @@ See https://github.com/vwxyzjn/gym-microrts/blob/b46c0815efd60ae959b70c14659efb9
 as an example.
 """
 
+MicroRTSGridModeVecEnvSelf = TypeVar("MicroRTSGridModeVecEnvSelf", bound="MicroRTSGridModeVecEnv")
 
 class MicroRTSGridModeVecEnv:
     metadata = {"render.modes": ["human", "rgb_array"], "video.frames_per_second": 150}
@@ -287,6 +289,10 @@ class MicroRTSGridModeVecEnv:
         self.source_unit_mask = action_mask[:, :, :, 0].reshape(self.num_envs, -1)
         action_type_and_parameter_mask = action_mask[:, :, :, 1:].reshape(self.num_envs, self.height * self.width, -1)
         return action_type_and_parameter_mask
+    
+    @property
+    def unwrapped(self: MicroRTSGridModeVecEnvSelf) -> MicroRTSGridModeVecEnvSelf:
+        return self
 
 
 class MicroRTSBotVecEnv(MicroRTSGridModeVecEnv):
