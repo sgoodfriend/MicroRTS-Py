@@ -136,7 +136,7 @@ class MicroRTSGridModeVecEnv:
         from rts.units import UnitTypeTable
 
         self.real_utt = UnitTypeTable()
-        from ai.rewardfunction import (
+        from ai.reward import (
             AttackRewardFunction,
             ProduceBuildingRewardFunction,
             ProduceCombatUnitRewardFunction,
@@ -391,7 +391,7 @@ class MicroRTSBotVecEnv(MicroRTSGridModeVecEnv):
         from rts.units import UnitTypeTable
 
         self.real_utt = UnitTypeTable()
-        from ai.rewardfunction import (
+        from ai.reward import (
             AttackRewardFunction,
             ProduceBuildingRewardFunction,
             ProduceCombatUnitRewardFunction,
