@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gym-microrts"
-version = "0.6.1a5"
+version = "0.6.1a6"
 description = ""
 authors = ["Costa Huang <costa.huang@outlook.com>"]
 exclude = [
